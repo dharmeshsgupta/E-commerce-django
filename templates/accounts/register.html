@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load socialaccount %}
+
+{% block content %}
+<section class="section-content padding-y">
+
+<div class="card mx-auto" style="max-width:520px; margin-top:40px;">
+        <article class="card-body">
+            {% include "includes/alerts.html" %}
+            <header class="mb-4"><h4 class="card-title">Sign up</h4></header>
+            <form action="{% url 'register' %}" method="POST">
+                {% csrf_token %}
+
+                <div class="form-row">
+                    <div class="col form-group">
+                        <label>First name</label>
+                        {{ form.first_name }}
+                    </div> <div class="col form-group">
+                        <label>Last name</label>
+                        {{ form.last_name}}
+                    </div> </div> <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Email Address</label>
+                        {{ form.email}}
+                    </div> <div class="form-group col-md-6">
+                        <label>Phone Number</label>
+                        {{ form.phone_number }}
+                    </div> </div> <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Create password</label>
+                        {{ form.password}}
+                    </div> <div class="form-group col-md-6">
+                        <label>Repeat password</label>
+                        {{ form.confirm_password }}
+                    </div> </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block"> Register </button>
+                </div> {% if form.email.errors or form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ form.email.errors }}
+                    {{ form.non_field_errors }}        
+                </div>
+                {% endif %}
+                
+            </form>
+            
+            <div class="form-group text-center mt-3">
+                <p class="text-muted">Or sign in with</p>
+                <a href="{% provider_login_url 'google' %}" class="btn btn-block" style="background-color: #dd4b39; color: white;">            
+                    <i class="fab fa-google"></i> &nbsp; Google
+                </a>
+            </div>
+
+        </article></div> <p class="text-center mt-4">Have an account? <a href="{% url 'login' %}">Log In</a></p>
+
+</section>
+{% endblock %}

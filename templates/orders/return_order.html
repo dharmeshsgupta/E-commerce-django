@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="section-content padding-y bg-light">
+    <div class="container">
+        <div class="card mx-auto shadow-sm" style="max-width: 600px;">
+            <div class="card-body">
+                <h4 class="card-title mb-4">Request a Return</h4>
+                
+                <div class="alert alert-info">
+                    <strong>Order #:</strong> {{ order.order_number }} <br>
+                    <strong>Total:</strong> ${{ order.order_total }}
+                </div>
+
+                <form action="{% url 'return_order' order.id %}" method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label>Reason for Return</label>
+                        {{ form.reason }}
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <button type="submit" class="btn btn-primary btn-block">Submit Return Request</button>
+                        <a href="{% url 'dashboard' %}" class="btn btn-light btn-block">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

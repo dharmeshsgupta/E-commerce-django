@@ -1,84 +1,280 @@
 {% load static %}
 
+<style>
+    /* --- COLOR PALETTE: ORANGE THEME --- */
+    :root {
+        --main-orange: #ff6600; /* Vibrant E-commerce Orange */
+        --dark-orange: #cc5200;
+        --light-orange: #fff0e6;
+    }
+
+    /* Override Bootstrap Primary Buttons */
+    .btn-primary {
+        background-color: var(--main-orange) !important;
+        border-color: var(--main-orange) !important;
+        color: #fff !important;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--dark-orange) !important;
+        border-color: var(--dark-orange) !important;
+    }
+
+    /* Override Outline Buttons */
+    .btn-outline-primary {
+        color: var(--main-orange) !important;
+        border-color: var(--main-orange) !important;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: var(--main-orange) !important;
+        color: #fff !important;
+    }
+
+    /* Links and Icons */
+    a { color: #333; }
+    a:hover { color: var(--main-orange); text-decoration: none; }
+    
+    .widget-header .icon {
+        color: var(--main-orange) !important;
+        border-color: #dee2e6 !important; /* Keep border subtle */
+    }
+
+    /* Search Bar Tweaks */
+    .search .form-control {
+        border-color: var(--main-orange);
+    }
+    
+    /* Top Navigation Polish */
+    .navbar-top {
+        background-color: #f8f9fa; /* Light grey for contrast */
+        font-size: 14px;
+    }
+
+    /* Widget Header */
+    .widget-header {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .widget-header:hover {
+        opacity: 0.8;
+    }
+
+    /* Cart Badge */
+    .notify {
+        background-color: #d9534f; /* Keep red for urgency/alerts */
+        top: -10px; 
+        right: -8px;
+        position: absolute;
+        font-size: 11px;
+        font-weight: bold;
+        min-width: 20px;
+        padding: 2px 6px;
+    }
+
+    /* Dropdown Menu Styling */
+    .dropdown-menu {
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ddd;
+    }
+
+    .dropdown-item {
+        transition: all 0.2s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: var(--light-orange);
+        color: var(--dark-orange);
+    }
+
+    /* Search Input Focus */
+    .search .form-control:focus {
+        border-color: var(--main-orange);
+        box-shadow: 0 0 0 0.2rem rgba(255, 102, 0, 0.25);
+    }
+
+    /* Search Bar Mobile Padding */
+    @media (max-width: 768px) {
+        .search {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    }
+
+    /* Icon Text Alignment */
+    .icontext {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .icontext .icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+    .icontext .text {
+        line-height: 1.4;
+    }
+
+    .icontext .text span {
+        display: block;
+    }
+
+    .icontext .text div {
+        font-size: 12px;
+    }
+
+    .icontext .text a {
+        margin: 0 2px;
+        font-weight: 500;
+    }
+
+    /* Widgets Wrap */
+    .widgets-wrap {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    /* Store Button Mobile Fix */
+    @media (max-width: 576px) {
+        .widgets-wrap {
+            gap: 10px;
+        }
+
+        .widget-header {
+            font-size: 14px;
+        }
+
+        .widget-header .icon-sm {
+            width: 28px;
+            height: 28px;
+            font-size: 14px;
+        }
+    }
+</style>
+
 <header class="section-header">
-<nav class="navbar p-md-0 navbar-expand-sm navbar-light border-bottom">
-<div class="container">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTop4" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarTop4">
-    <ul class="navbar-nav mr-auto">
-    	<li class="nav-item dropdown">
-		 	<a href="#" class="nav-link">   English </a>
-		    
-		</li>
-		<li class="nav-item dropdown">
-			<a href="#" class="nav-link"> USD </a>
-		</li>
-    </ul>
-    <ul class="navbar-nav">
-		<li><a href="#" class="nav-link"> <i class="fa fa-envelope"></i> Email </a></li>
-		<li><a href="#" class="nav-link"> <i class="fa fa-phone"></i> Call us </a></li>
-	</ul> <!-- list-inline //  -->
-  </div> <!-- navbar-collapse .// -->
-</div> <!-- container //  -->
-</nav>
+    
+    <nav class="navbar navbar-top p-md-0 navbar-expand-sm navbar-light border-bottom">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTop4" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTop4">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <span class="nav-link disabled text-muted"> <i class="fa fa-map-marker-alt"></i> Deliver to: India</span> 
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> English </a>
+                        <div class="dropdown-menu small">
+                            <a class="dropdown-item" href="#">Hindi</a>
+                            <a class="dropdown-item" href="#">English</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> USD </a>
+                        <div class="dropdown-menu small">
+                            <a class="dropdown-item" href="#">USD</a>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li><a href="{% url 'helps' %}" class="nav-link"> <i class="fa fa-comment-dots"></i> Help Center </a></li>
+                    <li><a href="{% url 'track_order' %}" class="nav-link"> <i class="fa fa-truck"></i> Track Order </a></li>
+                </ul> 
+            </div> 
+        </div> 
+    </nav>
 
-<section class="header-main border-bottom">
-	<div class="container">
-<div class="row align-items-center">
-	<div class="col-lg-2 col-md-3 col-6">
-		<a href="{% url 'home' %}" class="brand-wrap">
-			<img class="logo" src="{% static 'images/logo.png' %}">
-		</a> <!-- brand-wrap.// -->
-	</div>
-	<div class="col-lg col-sm col-md col-6 flex-grow-0">
-		<div class="category-wrap dropdown d-inline-block float-right">
-			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> 
-				<i class="fa fa-bars"></i> All category 
-			</button>
-			<div class="dropdown-menu">
-				<a class="dropdown-item" href="{% url 'store' %}">All category</a>
-				{% for category in links %}
-					<a class="dropdown-item" href="{{ category.get_url }}">{{ category.category_name }}</a>
-				{% endfor %}
-			</div>
-		</div>  <!-- category-wrap.// -->
-	</div> <!-- col.// -->
-	<a href="{% url 'store' %}" class="btn btn-outline-primary">Store</a>
-	<div class="col-lg  col-md-6 col-sm-12 col">
-		<form action="#" class="search">
-			<div class="input-group w-100">
-			    <input type="text" class="form-control" style="width:60%;" placeholder="Search">
-			    
-			    <div class="input-group-append">
-			      <button class="btn btn-primary" type="submit">
-			        <i class="fa fa-search"></i>
-			      </button>
-			    </div>
-		    </div>
-		</form> <!-- search-wrap .end// -->
-	</div> <!-- col.// -->
-	<div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
-				<div class="d-flex justify-content-end mb-3 mb-lg-0">
-					<div class="widget-header">
-						<small class="title text-muted">Welcome guest!</small>
-						<div> 
-							<a href="./signin.html">Sign in</a> <span class="dark-transp"> | </span>
-							<a href="./register.html"> Register</a>
-						</div>
-					</div>
-					<a href="./cart.html" class="widget-header pl-3 ml-3">
-						<div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></div>
-						<span class="badge badge-pill badge-danger notify">0</span>
-					</a>
-				</div> <!-- widgets-wrap.// -->
-			</div> <!-- col.// -->
-</div> <!-- row.// -->
-	</div> <!-- container.// -->
-</section> <!-- header-main .// -->
+    <section class="header-main border-bottom bg-white">
+        <div class="container">
+            <div class="row align-items-center">
+                
+                <div class="col-lg-2 col-md-3 col-6">
+                    <a href="{% url 'home' %}" class="brand-wrap">
+                        <img class="logo" src="{% static 'images/Gemini_Generated_Image_pr4m58pr4m58pr4m.png' %}" alt="Logo">
+                    </a> 
+                </div>
 
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <form action="{% url 'search' %}" class="search" method="GET">
+                        <div class="input-group w-100">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-bars"></i> All
+                                </button>
+                                <div class="dropdown-menu" style="max-height: 300px; overflow-y: auto;">
+                                    <a class="dropdown-item" href="{% url 'store' %}">
+                                        <strong>All Categories</strong>
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    {% for category in links %}
+                                        <a class="dropdown-item" href="{{ category.get_url }}">{{ category.category_name }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <input type="text" class="form-control" placeholder="Search for products, brands and more..." name="keyword">
+                            
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form> 
+                </div> 
 
+                <div class="col-lg-4 col-md-3 col-sm-12 col-12">
+                    <div class="widgets-wrap float-md-right">
+                        
+                        <div class="widget-header mr-3">
+                            <a href="{% url 'store' %}" class="btn btn-outline-primary">Store</a>
+                        </div>
 
+                        <div class="widget-header icontext">
+                            <div class="icon">
+                                <i href="{% url 'dashboard' %}" class="fa fa-user"></i>
+                            </div>
+                            <div class="text">
+                                {% if user.id is None %}
+                                    <span class="text-muted">Welcome!</span>
+                                    <div> 
+                                        <a href="{% url 'login' %}">Sign in</a> |  
+                                        <a href="{% url 'register' %}">Join</a>
+                                    </div>
+                                {% else %}
+                                    <span class="text-muted">Hello, {{ user.first_name }}</span>
+                                    <div> 
+                                        <a href="{% url 'dashboard' %}">Orders</a> | 
+                                        <a href="{% url 'logout' %}">Logout</a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
 
-</header> <!-- section-header.// -->
+                        <a href="{% url 'cart' %}" class="widget-header ml-3">
+                            <div class="icon icon-sm rounded-circle border">
+                                <i class="fa fa-shopping-cart"></i>
+                            </div>
+                            <span class="badge badge-pill badge-danger notify">{{ cart_count }}</span>
+                        </a>
+
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </section> 
+</header>

@@ -1,0 +1,31 @@
+<aside class="col-md-3">
+    <div class="card shadow-sm mb-3">
+        <div class="list-group list-group-flush">
+            
+            <a class="list-group-item list-group-item-action {% if 'dashboard' in request.path %}active{% endif %}" href="{% url 'dashboard' %}"> 
+                <i class="fa fa-tachometer-alt" style="width: 25px;"></i> Dashboard 
+            </a>
+
+            <a class="list-group-item list-group-item-action {% if 'my_orders' in request.path %}active{% endif %}" href="{% url 'my_orders' %}"> 
+                <i class="fa fa-list" style="width: 25px;"></i> My Orders 
+            </a>
+
+            <a class="list-group-item list-group-item-action {% if 'edit_profile' in request.path %}active{% endif %}" href="{% url 'edit_profile' %}"> 
+                <i class="fa fa-user-edit" style="width: 25px;"></i> Edit Profile 
+            </a>
+
+            <a class="list-group-item list-group-item-action {% if 'change_password' in request.path %}active{% endif %}" href="{% url 'change_password' %}"> 
+                <i class="fa fa-lock" style="width: 25px;"></i> Change Password 
+            </a>
+
+            <a class="list-group-item list-group-item-action {% if 'return_order' in request.path %}active{% endif %}" href="{% url 'dashboard' %}"> 
+                <i class="fa fa-undo" style="width: 25px;"></i> Return & Refund 
+            </a>
+
+        </div>
+    </div>
+
+    <a class="btn btn-outline-danger btn-block" href="{% url 'logout' %}"> 
+        <i class="fa fa-power-off"></i> <span class="text">Log out</span> 
+    </a> 
+</aside>

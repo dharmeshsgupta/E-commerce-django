@@ -1,0 +1,18 @@
+{
+    // Ensure .git folder is visible in Explorer
+    "files.exclude": {
+        "**/.git": false
+    },
+
+    // Make sure git decorations are enabled
+    "git.enabled": true,
+    // Disable Git's file decorations (colored badges) in Explorer so the green/yellow marks go away
+    "git.decorations.enabled": false,
+
+    // Keep explorer from hiding files listed in .gitignore (so you can see what's ignored)
+    "explorer.excludeGitIgnore": false,
+
+    // Turn off Explorer decoration colors and badges to remove all colored dots/badges
+    "explorer.decorations.colors": false,
+    "explorer.decorations.badges": false
+}

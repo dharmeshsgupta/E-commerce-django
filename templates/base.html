@@ -8,7 +8,7 @@
 <meta http-equiv="cache-control" content="max-age=604800" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<title>GreatKart | One of the Biggest Online Shopping Platform</title>
+<title>RiwaazWear | One of the Biggest Online Shopping Platform</title>
 
 <link href="{% static 'images/favicon.ico' %}" rel="shortcut icon" type="image/x-icon">
 
@@ -26,31 +26,36 @@
 <link href="{% static 'css/ui.css' %}" rel="stylesheet" type="text/css"/>
 <link href="{% static 'css/responsive.css' %}" rel="stylesheet" media="only screen and (max-width: 1200px)" />
 
+<link href="{% static 'css/custom.css' %}" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
 <!-- custom javascript -->
 <script src="{% static 'js/script.js' %}" type="text/javascript"></script>
 
+<script src="https://www.paypal.com/sdk/js?client-id=AWc7vsg2I1xcQTKLLxFLK8IiCIFRJQr3CEtzyUMyUMl97rQQtCE7m3wIIQiYKLlmtNlhCJhI8oTBBxeY&currency=USD"></script>
+
 <script type="text/javascript">
-/// some script
-
-// jquery ready start
+// jQuery ready start
 $(document).ready(function() {
-	// jQuery code
-
+    // jQuery code
 }); 
-// jquery end
+// jQuery end
 </script>
 
 </head>
 <body>
 
-
 <!-- navbar -->
 {% include "includes/navbar.html" %}
 
-    {% block content %}
-        <!-- content-->
-    {%endblock  %} 
+{% block content %}
+    <!-- content-->
+{% endblock %}
 
-    <!-- footer -->
-    {% include "includes/footer.html" %}
+<!-- footer -->
+{% include "includes/footer.html" %}
+
+</body>
+</html>
 
