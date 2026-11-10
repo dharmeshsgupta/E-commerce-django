@@ -7,3 +7,5 @@ __pycache__/
 .DS_Store
 media/
 staticfiles/
+.neon
+node_modules/

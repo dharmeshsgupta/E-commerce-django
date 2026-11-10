@@ -44,6 +44,8 @@ def create_profile_from_social(request, user, **kwargs):
 
 @receiver(post_save, sender=Account)
 def post_save_create_profile(sender, instance, created, **kwargs):
+    if kwargs.get('raw', False):
+        return
     if created:
         UserProfile.objects.get_or_create(user=instance)
     else:

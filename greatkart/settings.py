@@ -12,21 +12,20 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
-# from decouple import config
-
-
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
-# Load .env file manually to avoid python-decouple dependency
+# Load .env file
 env_path = BASE_DIR / '.env'
 if env_path.exists():
-    with open(env_path) as f:
+    with open(env_path, encoding='utf-8') as f:
         for line in f:
-            if line.strip() and not line.startswith('#') and '=' in line:
-                key, value = line.strip().split('=', 1)
-                os.environ.setdefault(key, value.strip("'\""))
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                key, value = line.split('=', 1)
+                os.environ[key.strip()] = value.strip("'\"")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -116,17 +115,45 @@ DATABASES = {
     }
 }
 
-# Production database configuration (PostgreSQL)
-if 'DATABASE_URL' in os.environ:
+# Neon Lakebase Postgres configuration
+is_migration_command = any(cmd in sys.argv for cmd in ['migrate', 'makemigrations', 'loaddata', 'dumpdata'])
+db_env_key = 'DATABASE_URL_UNPOOLED' if is_migration_command and 'DATABASE_URL_UNPOOLED' in os.environ else 'DATABASE_URL'
+
+if db_env_key in os.environ or 'DATABASE_URL' in os.environ:
     import urllib.parse
-    db_url = urllib.parse.urlparse(os.environ['DATABASE_URL'])
+    conn_url = os.environ.get(db_env_key) or os.environ.get('DATABASE_URL')
+    db_url = urllib.parse.urlparse(conn_url)
+    
+    # Resilient DNS resolution fallback in case local network/router refuses .neon.tech subdomains
+    host_addr = None
+    try:
+        import socket
+        socket.gethostbyname(db_url.hostname)
+    except Exception:
+        try:
+            import urllib.request, json
+            req = urllib.request.Request(f"https://8.8.8.8/resolve?name={db_url.hostname}&type=A", headers={"User-Agent": "python"})
+            with urllib.request.urlopen(req, timeout=4) as resp:
+                data = json.loads(resp.read().decode())
+                for ans in data.get("Answer", []):
+                    if ans.get("type") == 1:
+                        host_addr = ans.get("data")
+                        break
+        except Exception:
+            pass
+
+    options = {'sslmode': 'require'}
+    if host_addr:
+        options['hostaddr'] = host_addr
+
     DATABASES['default'] = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': db_url.path.lstrip('/'),
-        'USER': db_url.username,
-        'PASSWORD': db_url.password,
+        'USER': urllib.parse.unquote(db_url.username or ''),
+        'PASSWORD': urllib.parse.unquote(db_url.password or ''),
         'HOST': db_url.hostname,
         'PORT': db_url.port or '5432',
+        'OPTIONS': options,
     }
 elif os.environ.get('DB_NAME') and os.environ.get('DB_USER'):
     DATABASES['default'] = {

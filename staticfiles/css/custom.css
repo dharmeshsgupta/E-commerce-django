@@ -45,17 +45,23 @@ label:hover ~ input:checked ~ label{
   color: #ffb503 !important;
 }
 
-ul.thumb{
-  margin:0 auto;
-  padding: 0;
-  float: left;
-}
+.img-big-wrap img { width: 100%; display:block; }
+ul.thumb { margin:0; padding:0; display:flex; gap:8px; list-style:none; }
 ul.thumb li{
   list-style: none;
-  margin: 10px;
+  margin: 4px 0;
 }
-ul.thumb li img{
-  width: 80px;
-  height: 80px;
-  border: 1px solid grey;
+ul.thumb li img { width:72px; height:72px; object-fit:cover; cursor:pointer; border:1px solid #ddd; }
+
+/* active thumbnail */
+.active-thumb img { outline: 2px solid #007bff; }
+
+/* ensure gallery and main image align */
+.gallery-wrap { display:flex; flex-direction:column; }
+.img-big-wrap { margin-bottom:12px; }
+.img-big-wrap img { max-height:540px; object-fit:contain; }
+
+@media (max-width: 768px){
+  ul.thumb{ flex-wrap:wrap; }
+  ul.thumb li img{ width:60px; height:60px; }
 }
