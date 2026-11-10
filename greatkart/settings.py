@@ -255,9 +255,12 @@ SOCIALACCOUNT_PROVIDERS = {
 # SMTP Configuration
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'dharmesh.pse.2024@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '').replace(' ', '')
 EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER', 'dharmesh.pse.2024@gmail.com')
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+EMAIL_TIMEOUT = 10
 
 SITE_ID = 1
 

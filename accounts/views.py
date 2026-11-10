@@ -56,7 +56,12 @@ def register(request):
                 'token': default_token_generator.make_token(user),
             })
             to_email = email
-            send_email = EmailMessage(mail_subject, message, to=[to_email])
+            send_email = EmailMessage(
+                mail_subject,
+                message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[to_email]
+            )
             try:
                 send_email.send()
             except Exception as e:
@@ -160,7 +165,12 @@ def forgotPassword(request):
                 'token': default_token_generator.make_token(user),
             })
             to_email = email
-            send_email = EmailMessage(mail_subject, message, to=[to_email])
+            send_email = EmailMessage(
+                mail_subject,
+                message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[to_email]
+            )
             try:
                 send_email.send()
             except Exception as e:
