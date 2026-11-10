@@ -23,8 +23,15 @@ fi
 echo "=== Vercel Build Step: Collecting static files ==="
 python manage.py collectstatic --noinput --clear
 
-echo "=== Vercel Build Step: Setting up static files directory structure ==="
+echo "=== Vercel Build Step: Setting up static and media files directory structure ==="
 mkdir -p staticfiles/static
 cp -r staticfiles/admin staticfiles/css staticfiles/js staticfiles/images staticfiles/static/ 2>/dev/null || true
+
+# Copy media files to staticfiles/media for fast Vercel CDN serving
+if [ -d "media" ]; then
+    echo "Copying media uploads to staticfiles/media..."
+    mkdir -p staticfiles/media
+    cp -r media/* staticfiles/media/ 2>/dev/null || true
+fi
 
 echo "=== Build finished successfully! ==="
