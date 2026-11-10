@@ -34,7 +34,22 @@ if env_path.exists():
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-key-placeholder')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = str(os.environ.get('DEBUG', 'False')).lower() == 'true'
-ALLOWED_HOSTS = ["*"]
+
+# Allowed hosts configuration for Vercel and local development
+ALLOWED_HOSTS = [
+    '*',
+    '.vercel.app',
+    'riwaazwear.vercel.app',
+    'localhost',
+    '127.0.0.1',
+]
+if os.environ.get('ALLOWED_HOSTS'):
+    ALLOWED_HOSTS.extend([h.strip() for h in os.environ.get('ALLOWED_HOSTS').split(',') if h.strip()])
+
+# Reverse proxy SSL & Host configuration for Vercel
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
 
 
 # Application definition
