@@ -2,12 +2,11 @@
 set -o errexit
 
 if command -v uv >/dev/null 2>&1; then
-    uv pip install --system -r requirements.txt
-elif python3 -m venv /tmp/build_venv 2>/dev/null; then
+    uv venv --python 3.12 /tmp/build_venv
     source /tmp/build_venv/bin/activate
-    pip install -r requirements.txt
+    uv pip install -r requirements.txt
 else
-    python3 -m pip install --break-system-packages -r requirements.txt || pip install --break-system-packages -r requirements.txt
+    pip install -r requirements.txt
 fi
 
 python manage.py collectstatic --no-input --clear
