@@ -11,7 +11,45 @@ def _cart_id(request):
     cart = request.session.session_key
     if not cart:
         cart = request.session.create()
+    request.session['guest_cart_id'] = cart
     return cart
+
+def merge_cart(request, user):
+    """
+    Merges guest cart items with existing user cart items.
+    """
+    if not request or not hasattr(request, 'session'):
+        return
+    try:
+        cart_id = request.session.get('guest_cart_id') or request.session.session_key
+        if not cart_id:
+            return
+        try:
+            cart = Cart.objects.get(cart_id=cart_id)
+        except Cart.DoesNotExist:
+            return
+
+        guest_items = CartItem.objects.filter(cart=cart)
+        for guest_item in guest_items:
+            guest_variations = set(guest_item.variations.all())
+            user_items = CartItem.objects.filter(user=user, product=guest_item.product)
+            matched = False
+            for u_item in user_items:
+                if set(u_item.variations.all()) == guest_variations:
+                    u_item.quantity += guest_item.quantity
+                    u_item.save()
+                    guest_item.delete()
+                    matched = True
+                    break
+            if not matched:
+                guest_item.user = user
+                guest_item.cart = None
+                guest_item.save()
+
+        CartItem.objects.filter(cart=cart).delete()
+        request.session.pop('guest_cart_id', None)
+    except Exception as e:
+        print(f"Error merging cart: {e}")
 
 def add_cart(request, product_id):
     current_user = request.user
@@ -197,7 +235,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
     }
     return render(request, 'store/cart.html', context)
 
-@login_required(login_url='login')
+@login_required(login_url='accounts:login')
 def checkout(request, total=0, quantity=0, cart_items=None):
     
     try:

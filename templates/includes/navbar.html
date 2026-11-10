@@ -191,7 +191,7 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav">
-                    <li><a href="{% url 'helps' %}" class="nav-link"> <i class="fa fa-comment-dots"></i> Help Center </a></li>
+                    <li><a href="{% url 'accounts:helps' %}" class="nav-link"> <i class="fa fa-comment-dots"></i> Help Center </a></li>
                     <li><a href="{% url 'track_order' %}" class="nav-link"> <i class="fa fa-truck"></i> Track Order </a></li>
                 </ul> 
             </div> 
@@ -246,20 +246,20 @@
 
                         <div class="widget-header icontext">
                             <div class="icon">
-                                <i href="{% url 'dashboard' %}" class="fa fa-user"></i>
+                                <a href="{% url 'accounts:dashboard' %}" class="text-dark"><i class="fa fa-user"></i></a>
                             </div>
                             <div class="text">
                                 {% if user.id is None %}
                                     <span class="text-muted">Welcome!</span>
                                     <div> 
-                                        <a href="{% url 'login' %}">Sign in</a> |  
-                                        <a href="{% url 'register' %}">Join</a>
+                                        <a href="{% url 'accounts:login' %}">Sign in</a> |  
+                                        <a href="{% url 'accounts:register' %}">Join</a>
                                     </div>
                                 {% else %}
                                     <span class="text-muted">Hello, {{ user.first_name }}</span>
                                     <div> 
-                                        <a href="{% url 'dashboard' %}">Orders</a> | 
-                                        <a href="{% url 'logout' %}">Logout</a>
+                                        <a href="{% url 'accounts:dashboard' %}">Orders</a> | 
+                                        <a href="{% url 'accounts:logout' %}">Logout</a>
                                     </div>
                                 {% endif %}
                             </div>

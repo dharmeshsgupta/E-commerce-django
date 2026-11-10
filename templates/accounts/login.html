@@ -10,7 +10,7 @@
 {% if request.GET.command == 'verification' %}
     <div class="card mx-auto alert alert-info text-center" role="alert" style="max-width: 380px; margin-top:100px;">
         <p>Thank you for registering with us. We have sent you a verification email to <strong>{{ request.GET.email }}</strong>. Please verify your email address to complete the registration.</p>
-        <p>Already verified? <a href="{% url 'login' %}">Login here</a></p>
+        <p>Already verified? <a href="{% url 'accounts:login' %}">Login here</a></p>
     </div> <!-- card .// -->
 {% else %}
 
@@ -18,8 +18,11 @@
         {% include "includes/alerts.html" %}
         <div class="card-body">
             <h4 class="card-title mb-4">Sign in</h4>
-            <form action="{% url 'login' %}" method="POST">
+            <form action="{% url 'accounts:login' %}" method="POST">
                 {% csrf_token %}
+                {% if request.GET.next %}
+                    <input type="hidden" name="next" value="{{ request.GET.next }}">
+                {% endif %}
                 <div class="form-group">
                     <input type="email" class="form-control" placeholder="Email Address" name="email" required>
                 </div> <!-- form-group// -->
@@ -28,7 +31,7 @@
                 </div> <!-- form-group// -->
                 
                 <div class="form-group">
-                    <a href="{% url 'forgotPassword' %}" class="float-right">Forgot password?</a> 
+                    <a href="{% url 'accounts:forgotPassword' %}" class="float-right">Forgot password?</a> 
                 </div> <!-- form-group form-check .// -->
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block"> Login </button>
@@ -45,7 +48,7 @@
         </div> <!-- card-body.// -->
     </div> <!-- card .// -->
 
-    <p class="text-center mt-4">Don't have account? <a href="{% url 'register' %}">Sign up</a></p>
+    <p class="text-center mt-4">Don't have account? <a href="{% url 'accounts:register' %}">Sign up</a></p>
 
 
 {% endif %}

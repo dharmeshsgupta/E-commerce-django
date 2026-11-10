@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from .models import ReturnRequest
 from .forms import ReturnForm
 from django.shortcuts import render, redirect
@@ -17,8 +18,8 @@ from django.template.loader import render_to_string
 
 # Create your views here.
 
+@login_required(login_url='accounts:login')
 def order_history(request):
-    # Add logic here to fetch user's orders
     return render(request, 'orders/order_history.html')
 
 def wishlist(request):
@@ -55,13 +56,14 @@ def track_order(request):
 
 # orders/views.py
 
+@login_required(login_url='accounts:login')
 def return_order(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
     
     # Check if return already exists
     if ReturnRequest.objects.filter(order=order).exists():
         messages.warning(request, "You have already submitted a return request for this order.")
-        return redirect('dashboard') # Redirect to user dashboard
+        return redirect('accounts:dashboard') # Redirect to user dashboard
 
     if request.method == 'POST':
         form = ReturnForm(request.POST)
@@ -70,7 +72,7 @@ def return_order(request, order_id):
             data.order = order
             data.save()
             messages.success(request, "Return request submitted successfully! We will notify you shortly.")
-            return redirect('dashboard')
+            return redirect('accounts:dashboard')
     else:
         form = ReturnForm()
 
@@ -80,6 +82,7 @@ def return_order(request, order_id):
     }
     return render(request, 'orders/return_order.html', context)
 
+@login_required(login_url='accounts:login')
 def payments(request):
     body = json.loads(request.body)
     order = Order.objects.get(user=request.user, is_ordered=False, order_number=body['orderID'])
@@ -135,7 +138,10 @@ def payments(request):
     })
     to_email = request.user.email
     send_email = EmailMessage(mail_subject, message, to=[to_email])
-    send_email.send()
+    try:
+        send_email.send()
+    except Exception as e:
+        print(f"Failed to send order confirmation email: {e}")
 
     # Send order number and transaction id back to sendData method via JsonResponse
     data = {
@@ -144,6 +150,7 @@ def payments(request):
     }
     return JsonResponse(data)
 
+@login_required(login_url='accounts:login')
 def place_order(request, total=0, quantity=0,):
     current_user = request.user
 

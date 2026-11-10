@@ -27,7 +27,7 @@
                                     <div class="card-body">
                                         <h5 class="card-title text-muted">Total Orders</h5>
                                         <h2 class="display-4 text-primary">{{ orders_count }}</h2>
-                                        <a href="{% url 'orders' %}" class="btn btn-primary btn-sm mt-2">View All Orders</a>
+                                        <a href="{% url 'accounts:my_orders' %}" class="btn btn-primary btn-sm mt-2">View All Orders</a>
                                     </div>
                                 </div>
                             </div> 
@@ -42,7 +42,7 @@
                                         
                                         <h6 class="font-weight-bold">{{ user.full_name }}</h6>
                                         <p class="text-muted mb-1">{{ user.email }}</p>
-                                        <a href="{% url 'edit_profile' %}" class="btn btn-outline-secondary btn-sm">Edit Profile</a>
+                                        <a href="{% url 'accounts:edit_profile' %}" class="btn btn-outline-secondary btn-sm">Edit Profile</a>
                                     </div>
                                 </div>
                             </div> 
@@ -65,7 +65,7 @@
                                     <p class="mb-1"><strong>Status:</strong> <span class="text-success">{{ order.status }}</span></p>
                                 </div>
                                 <div class="col-md-4 text-md-right mt-3 mt-md-0">
-                                    <a href="{% url 'order_detail' order.order_number %}" class="btn btn-primary btn-sm btn-block">View Order</a>
+                                    <a href="{% url 'accounts:order_detail' order.order_number %}" class="btn btn-primary btn-sm btn-block">View Order</a>
                                     
                                     {% if order.status == 'Delivered' %}
                                         <a href="{% url 'return_order' order.id %}" class="btn btn-outline-danger btn-sm btn-block mt-2">Return Item</a>

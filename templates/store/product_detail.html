@@ -44,16 +44,13 @@
                     <p>{{ single_product.discription }}</p>
 
 
-    ======================= -->
-
-                <br><hr>
                     <div class="row">
                         <div class="item-option-select">
                             <h6>Choose Color</h6>
                             <select name="color" class="form-control" required>
                                 <option value="" disabled selected> Choose Color</option>
                                 {% for i in single_product.variation_set.colors %}
-                                <option value={{ i.variation_value | lower}}>{{ i.variation_value | capfirst }}</option>
+                                <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -64,7 +61,7 @@
                                 <select name="size" class="form-control">
                                     <option value="" disabled selected> Choose Size</option>
                                     {% for i in single_product.variation_set.sizes %}
-                                    <option value={{ i.variation_value | lower}}>{{ i.variation_value | capfirst }}</option>
+                                    <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -132,7 +129,7 @@
                 {% else %}
                     <div class="alert alert-danger" role="alert">
                         You must be logged in to post a review. 
-                        <a href="{% url 'login' %}" class="alert-link ml-2">Login now</a>
+                        <a href="{% url 'accounts:login' %}" class="alert-link ml-2">Login now</a>
                     </div>
                 {% endif %}
             </div>

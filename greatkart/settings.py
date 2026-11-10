@@ -35,7 +35,7 @@ if env_path.exists():
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-key-placeholder')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = str(os.environ.get('DEBUG', 'False')).lower() == 'true'
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -61,6 +61,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -110,25 +111,32 @@ AUTH_USER_MODEL = 'accounts.Account'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+# Production database configuration (PostgreSQL)
+if 'DATABASE_URL' in os.environ:
+    import urllib.parse
+    db_url = urllib.parse.urlparse(os.environ['DATABASE_URL'])
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': db_url.path.lstrip('/'),
+        'USER': db_url.username,
+        'PASSWORD': db_url.password,
+        'HOST': db_url.hostname,
+        'PORT': db_url.port or '5432',
+    }
+elif os.environ.get('DB_NAME') and os.environ.get('DB_USER'):
+    DATABASES['default'] = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('DB_NAME'),
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
-}
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ.get('DB_NAME'),
-#         'USER': os.environ.get('DB_USER'),
-#         'PASSWORD': os.environ.get('DB_PASSWORD'),
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
 
 
 # Password validation
@@ -211,22 +219,48 @@ EMAIL_USE_TLS = True
 
 SITE_ID = 1
 
-# POINT TO YOUR CUSTOM USER MODEL
-AUTH_USER_MODEL = 'accounts.Account' 
+# # POINT TO YOUR CUSTOM USER MODEL
+# AUTH_USER_MODEL = 'accounts.Account' 
 
-# Allauth Config matches your Account model
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None # or 'email' if you want email as main ID
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# Allauth Config for email-based login without username
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 
-# We will create this file in Step 3
+# User model settings - we have username but allauth won't use it
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
+
+# Email authentication
+ACCOUNT_UNIQUE_EMAIL = True
+
+# Adapter for custom user field handling (phone_number)
 SOCIALACCOUNT_ADAPTER = 'accounts.adapters.MySocialAccountAdapter'
+
 # Redirect users after login/logout
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# Optional: Require email verification, etc.
+# Email verification settings
 ACCOUNT_EMAIL_VERIFICATION = 'none' 
 SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
+
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
+
+# Production CSRF & Host Configuration
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.vercel.app',
+]
+if 'RAILWAY_PUBLIC_DOMAIN' in os.environ:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{os.environ.get("RAILWAY_PUBLIC_DOMAIN")}')
+if 'RENDER_EXTERNAL_HOSTNAME' in os.environ:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{os.environ.get("RENDER_EXTERNAL_HOSTNAME")}')
+if 'CSRF_TRUSTED_ORIGINS' in os.environ:
+    CSRF_TRUSTED_ORIGINS.extend([origin.strip() for origin in os.environ.get('CSRF_TRUSTED_ORIGINS').split(',') if origin.strip()])

@@ -8,7 +8,7 @@
         <article class="card-body">
             {% include "includes/alerts.html" %}
             <header class="mb-4"><h4 class="card-title">Sign up</h4></header>
-            <form action="{% url 'register' %}" method="POST">
+            <form action="{% url 'accounts:register' %}" method="POST">
                 {% csrf_token %}
 
                 <div class="form-row">
@@ -51,7 +51,7 @@
                 </a>
             </div>
 
-        </article></div> <p class="text-center mt-4">Have an account? <a href="{% url 'login' %}">Log In</a></p>
+        </article></div> <p class="text-center mt-4">Have an account? <a href="{% url 'accounts:login' %}">Log In</a></p>
 
 </section>
 {% endblock %}
