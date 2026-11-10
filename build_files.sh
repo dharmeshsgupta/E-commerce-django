@@ -1,15 +1,23 @@
 #!/bin/bash
 set -e
 
+export PIP_BREAK_SYSTEM_PACKAGES=1
+export PYTHONUNBUFFERED=1
+
 echo "Installing dependencies..."
-if command -v uv &> /dev/null; then
+if command -v uv >/dev/null 2>&1; then
+    echo "Using uv to install dependencies..."
     uv pip install -r requirements.txt --system
+elif command -v python3 >/dev/null 2>&1; then
+    echo "Using python3 pip to install dependencies..."
+    python3 -m pip install -r requirements.txt
 else
-    python3 -m pip install -r requirements.txt --break-system-packages 2>/dev/null || python -m pip install -r requirements.txt --break-system-packages 2>/dev/null || pip install -r requirements.txt --break-system-packages
+    echo "Using pip to install dependencies..."
+    pip install -r requirements.txt
 fi
 
 echo "Collecting static files..."
-python3 manage.py collectstatic --noinput --clear 2>/dev/null || python manage.py collectstatic --noinput --clear
+python3 manage.py collectstatic --noinput --clear || python manage.py collectstatic --noinput --clear
 
 echo "Ensuring static assets directory compatibility..."
 mkdir -p staticfiles/static
