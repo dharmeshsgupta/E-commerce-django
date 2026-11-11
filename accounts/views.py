@@ -62,11 +62,19 @@ def register(request):
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 to=[to_email]
             )
+            email_sent = False
             try:
-                send_email.send()
+                if getattr(settings, 'EMAIL_HOST_PASSWORD', None):
+                    send_email.send()
+                    email_sent = True
             except Exception as e:
                 print(f"Error sending activation email: {e}")
-            return redirect('/accounts/login/?command=verification&email='+email)
+
+            if email_sent:
+                return redirect('/accounts/login/?command=verification&email=' + email)
+            else:
+                messages.success(request, 'Registration successful! Your account is active and you can now log in directly.')
+                return redirect('accounts:login')
     else:
         form = RegistrationForm()
     context = {
@@ -171,12 +179,18 @@ def forgotPassword(request):
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 to=[to_email]
             )
+            email_sent = False
             try:
-                send_email.send()
+                if getattr(settings, 'EMAIL_HOST_PASSWORD', None):
+                    send_email.send()
+                    email_sent = True
             except Exception as e:
                 print(f"Error sending password reset email: {e}")
             
-            messages.success(request, 'Password reset email has been sent to your email address.')
+            if email_sent:
+                messages.success(request, 'Password reset email has been sent to your email address.')
+            else:
+                messages.warning(request, 'Email service is currently offline. Please contact admin to reset your password.')
             return redirect('accounts:login')  
         else:
             messages.error(request, 'Account does not exist!')
